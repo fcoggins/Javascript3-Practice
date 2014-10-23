@@ -2,7 +2,7 @@ import json
 
 from flask import Flask, request, render_template, make_response
 
-from api import wall_list, wall_add, wall_error
+from api import wall_list, wall_add, wall_error, wall_clear
 
 
 app = Flask(__name__)
@@ -51,6 +51,12 @@ def list_messages():
     """Return list of wall messages as JSON."""
 
     result = wall_list()
+    return _convert_to_JSON(result)
+
+@app.route("/api/wall/clear")
+def clear_messages():
+    """Return an empty list"""
+    result = wall_clear()
     return _convert_to_JSON(result)
 
 

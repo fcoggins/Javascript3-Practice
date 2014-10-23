@@ -1,9 +1,13 @@
+
 $(document).ready(function () {
     // Normally, JavaScript runs code at the time that the <script>
     // tags loads the JS. By putting this inside a jQuery $(document).ready()
     // function, this code only gets run when the document finishing loading.
 
     $("#message-form").submit(handleFormSubmit);
+    $("#message-clear").click(clearMessages);
+    getMessages();
+
 });
 
 
@@ -21,6 +25,8 @@ function handleFormSubmit(evt) {
 
     // Reset the message container to be empty
     textArea.val("");
+
+
 }
 
 
@@ -34,8 +40,36 @@ function addMessage(msg) {
         function (data) {
             console.log("addMessage: ", data);
             displayResultStatus(data.result);
+            getMessages();
         }
     );
+}
+
+function getMessages(){
+    // first clear the message list
+    // get messages from the /api/wall/list using the .get method. Loop through
+    // the messages and build the rquired html, then place the new html into the
+    // page.
+
+    $('#message-container').empty();
+    $.get('/api/wall/list', function(result){
+        var html = "" ;
+        for(var i = 0; i < result['messages'].length; i ++){
+            $('#message-container').prepend("<li class='list-group-item'>" +
+                result['messages'][i]['message']+ "</li>");
+        }
+    });
+}
+
+function clearMessages(){
+    displayResultStatus('Messages cleared');
+    $('#message-container').empty();
+    $.get('/api/wall/clear', function(result){
+        $('#message-container').prepend("<li class='list-group-item'>" +
+                result['messages'][0]['message']+ "</li>");
+        }
+        );
+
 }
 
 
@@ -67,4 +101,5 @@ function displayResultStatus(resultMsg) {
             $(self).slideUp();
         }, 2000);
     });
+
 }

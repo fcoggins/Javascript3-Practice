@@ -40,6 +40,16 @@ def wall_list():
         "messages": session.setdefault('wall', DEFAULT_MESSAGES),
     }
 
+def wall_clear():
+    """
+    Clear session return dictonary with default message + result code.
+    """
+    session.clear()
+    return {
+        "result": "OK",
+        "messages": session.setdefault('wall', DEFAULT_MESSAGES),
+    }
+
 
 def wall_add(msg):
     """Set a new message.
