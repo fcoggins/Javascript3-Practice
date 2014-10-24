@@ -7,9 +7,17 @@ $(document).ready(function () {
     $("#message-form").submit(handleFormSubmit);
     $("#message-clear").click(clearMessages);
     getMessages();
+ });
 
-});
 
+function preventFlooding(){
+
+       $("#message-send").prop("disabled", true);
+       setTimeout (function(){
+        $("#message-send").prop("disabled", false);
+       }, 5000);
+
+}
 
 /**
  * Handle submission of the form.
@@ -25,6 +33,8 @@ function handleFormSubmit(evt) {
 
     // Reset the message container to be empty
     textArea.val("");
+
+    preventFlooding();
 
 
 }
